@@ -1,0 +1,2 @@
+sym:stdout = @process.stdout
+stdout.writeln!("foo the fooing fooers")
