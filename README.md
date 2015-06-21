@@ -182,8 +182,8 @@ fn:log(...;):
     write_log(@args)
 ```
 
-### Types
-Types are classifications of data structures and associated behavior.
+### Custom Types
+Custom types are classifications of data structures and associated behavior.
 
 **point.atl**
 ```
@@ -211,9 +211,63 @@ typ:Circle:
 @export.Circle = Circle
 ```
 
+### Scalar Types
+Scalar types hold a single value of known length.
+
+#### Flag
+```
+flg:completed = false
+flg:public = true
+```
+
+#### Integer
+```
+int:max = 100
+int:min = -100
+```
+
+#### Number
+```
+num:pi = 3.14159
+num:avogadro = 6.022e+23
+```
+
+#### Character
+```
+chr:newline = 10    -- Unicode code point for Line Feed
+```
+
+#### String
+```
+str:name = "Muhammad Li"
+str:alternate = 'Alternate "quotes" can be nested'
+str:escaped = "Quotes can be ""escaped"" by doubling them"
+str:non_latin = "平仮名"
+```
+
+##### String Concatenation
+The `@join` operator can be used to concatenate strings.  The *join* operator is
+unique in that it is implicit when two values have no operator between them.
+
+```
+str:foo = "foo"
+str:bar = "bar"
+str:foo_bar = foo bar   -- "foobar"
+str:line = "This ends with a newline" 10
+```
+
 ### @-variables
 The `@-variables` are read-only compiler variables which are available within
 your code within the appropriate scope.
+
+#### @add
+The add operator.  Can be redefined on a custom type.
+
+```
+typ:Point(int:x, int:y):
+    fn:@add(Point:p;Point):
+        ret:Point(@me.x + p.x, @me.y + p.y)
+```
 
 #### @asm
 Provides architecture dependent access to registers, *et al*; `@asm` is
@@ -285,6 +339,28 @@ Language Organization
 
 Open Questions
 --------------
+#### Functions vs. Procedures
+**function**
+```
+fn:square(int:n): n*n
+
+fn:format_flag(flg:x):
+    ret: "yes" ? x
+    ret: "no"
+
+fn:fib(0): 0
+fn:fib(1): 1
+fn:fib(int:n|n>1): fib(n-1) + fib(n-2)
+```
+
+**procedure**
+```
+proc:
+
+-- download files and upload them to client servers
+
+```
+
 #### String literals
 **strings**
 ```
