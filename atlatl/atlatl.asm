@@ -1,4 +1,5 @@
 global _start
+extern zstr.len
 
 section .text
 _start:
@@ -27,7 +28,7 @@ print_args:
 ; echo null-terminated string to stdout
 out:							; outln(ZSTRING)
 	push	rax					; preserve arg
-	call	zstrlen				; measure string
+	call	zstr.len			; measure string
 
 	pop		rsi					; message
 	mov		rdx, rax			; length returned
@@ -86,18 +87,6 @@ qwoutln:						; qwoutln(QWORD)
 	mov		rsi, qwbuf			; message
 	mov		rdx, 0x1			; number of characters
 	syscall
-
-	ret
-
-; zstrlen(RAX) => RAX
-; calculate length of null-terminated string
-zstrlen:						; zstrlen(ZSTRING)
-	mov		rdi, rax			; beginning of scan
-	xor		al, al				; scan for NULL
-	mov		rcx, 0xffffffff		; limit scan to 2GiB
-	repne	scasb				; scan (RCX = limit - 1 - len)
-	mov		rax, 0xfffffffe		; limit - 1
-	sub		rax, rcx			; length
 
 	ret
 
