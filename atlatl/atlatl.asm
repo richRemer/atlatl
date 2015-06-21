@@ -2,17 +2,10 @@ global _start
 
 section .text
 _start:
-	mov     rax, 1				; sys_write
-	mov     rdi, 1				; stdout
-	mov     rsi, msg			; message
-	mov     rdx, len			; length
-	syscall
+	mov		rax, app_id			; zstring app id
+	call	outln
 
-	mov		rax, [rsp]			; stack points to argc
-	push	rax					; preserve argc
-	call	qwoutln				; output number of arguments
-	pop		rbx					; recall argc
-
+	mov		rbx, [rsp]			; argc
 	mov		rcx, 0				; start at arg 0
 print_args:
 	mov		rax, [rsp+rcx*8+8]	; current string arg
@@ -51,11 +44,12 @@ outln:							; outln(ZSTRING)
 
 	mov		rax, 1				; sys_write
 	mov		rdi, 1				; stdout
-	mov		rsi, endln			; message
+	mov		rsi, outln_endln	; message
 	mov		rdx, 0x1			; length
 	syscall
 
 	ret
+	outln_endln:	db	0xa
 
 ; qwout(RAX)
 ; echo 64 bit value to stdout
@@ -108,10 +102,8 @@ zstrlen:						; zstrlen(ZSTRING)
 	ret
 
 section .data
-hexits:	db		"0123456789ABCDEF"
-msg:    db      "Hello, foo!", 0xa
-len:    equ     $ - msg
-endln:	db		0xa
+hexits:		db		"0123456789ABCDEF"
+app_id:		db		"atlatl v0.0.1α", 0x0
 
 section .bss
 qwbuf:	resb	16
