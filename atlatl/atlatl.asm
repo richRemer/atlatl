@@ -7,17 +7,18 @@ _start:
 	call	outln
 
 	mov		rbx, [rsp]			; argc
-	mov		rcx, 0				; start at arg 0
+	mov		rcx, 0				; arg 0
 print_args:
+	inc		rcx					; next arg (skip first arg)
+	cmp		rbx, rcx			; at end of args?
+	jz		print_args_break	; exit loop
 	mov		rax, [rsp+rcx*8+8]	; current string arg
 	push	rbx					; preserve before call
 	push	rcx					; preserve before call
 	call	outln				; print arg
 	pop		rcx					; recall after call
 	pop		rbx					; recall after call
-	inc		rcx					; next arg
-	cmp		rbx, rcx			; check if done
-	jnz		print_args			; loop
+	print_args_break:
 
 	; sys_exit
 	mov     rax, 60
