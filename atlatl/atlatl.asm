@@ -3,25 +3,16 @@ global _start
 extern zstr.len
 extern std.outln
 extern std.outqwln
+extern zptrs.each
 
 section .text
 _start:
 	mov		rax, app_id			; zstring app id
 	call	std.outln
 
-	mov		rbx, [rsp]			; argc
-	mov		rcx, 0				; arg 0
-print_args:
-	inc		rcx					; next arg (skip first arg)
-	cmp		rbx, rcx			; at end of args?
-	jz		.break				; exit loop
-	mov		rax, [rsp+rcx*8+8]	; current string arg
-	push	rbx					; preserve before call
-	push	rcx					; preserve before call
-	call	std.outln			; print arg
-	pop		rcx					; recall after call
-	pop		rbx					; recall after call
-	.break:
+	lea		rax, [rsp+16]		; argv
+	mov		rbx, std.outln		; callable
+	call	zptrs.each			; std.outln each string in argv
 
 	mov     rax, 60				; sys_exit
 	mov     rdi, 0				; success
