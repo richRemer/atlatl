@@ -2,6 +2,7 @@ global std.out
 global std.outln
 global std.outqw
 global std.outqwln
+global std.endln
 
 extern zstr.len
 
