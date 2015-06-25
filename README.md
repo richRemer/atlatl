@@ -1,7 +1,19 @@
 @lang Programming Language
 ==========================
-This is all just spewed ideas and nonsense.  I have since decided on a bottom-up
-approach, so much of this is poorly organized notes on old ideas.
+This is all just spewed ideas and nonsense.  I have since decided on a
+bottom-up approach, so much of this is poorly organized notes on old ideas.
+
+Work is now progressing on a minimal compiler written in AMD64 assembly.  To
+build, `cd` into the `atlatl` directory and run `make`.  This will create a
+binary called `atlatl` in the same directory.
+
+**Example**
+```sh
+git clone git@github.com:richRemer/atlatl.git
+cd atlatl/atlatl
+make
+./atlatl
+```
 
 Source Files
 ------------
