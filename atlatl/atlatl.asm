@@ -11,14 +11,14 @@ _start:
 print_args:
 	inc		rcx					; next arg (skip first arg)
 	cmp		rbx, rcx			; at end of args?
-	jz		print_args_break	; exit loop
+	jz		.break				; exit loop
 	mov		rax, [rsp+rcx*8+8]	; current string arg
 	push	rbx					; preserve before call
 	push	rcx					; preserve before call
 	call	outln				; print arg
 	pop		rcx					; recall after call
 	pop		rbx					; recall after call
-	print_args_break:
+	.break:
 
 	; sys_exit
 	mov     rax, 60
@@ -46,19 +46,19 @@ outln:							; outln(ZSTRING)
 
 	mov		rax, 1				; sys_write
 	mov		rdi, 1				; stdout
-	mov		rsi, outln_endln	; message
+	mov		rsi, .endln			; message
 	mov		rdx, 0x1			; length
 	syscall
 
 	ret
-	outln_endln:	db	0xa
+	.endln:	db	0xa
 
 ; qwout(RAX)
 ; echo 64 bit value to stdout
 qwout:							; qwout(QWORD)
 
 	mov		rcx, 0x10			; number of characters
-qwout_char:
+	.char:
 	mov		rbx, rax			; make copy
 	and		rbx, 0xf 			; mask low bits
 	mov		rsi, hexits			; read buffer
@@ -67,7 +67,7 @@ qwout_char:
 	mov		[rcx+rdi-1], dl		; move hexit into buffer
 	shr		rax, 4				; consume bits
 	dec		rcx					; decrement character counter
-	jnz		qwout_char			; loop
+	jnz		.char				; loop
 
 	mov		rax, 1				; sys_write
 	mov		rdi, 1				; stdout
