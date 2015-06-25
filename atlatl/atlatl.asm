@@ -23,8 +23,7 @@ print_args:
 	pop		rbx					; recall after call
 	.break:
 
-	; sys_exit
-	mov     rax, 60
+	mov     rax, 60				; sys_exit
 	mov     rdi, 0				; success
 	syscall
 
