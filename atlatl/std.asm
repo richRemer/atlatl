@@ -24,16 +24,15 @@ std.out:
 ; std.outln(RAX)
 ; print null-terminated string to stdout, followed by newline
 std.outln:
-	call	std.out		; echo string
+	call	std.out			; echo string
 
-	mov		rax, 1		; sys_write
-	mov		rdi, 1		; stdout
-	mov		rsi, .endln	; message
-	mov		rdx, 1		; length
+	mov		rax, 1			; sys_write
+	mov		rdi, 1			; stdout
+	mov		rsi, std.endln	; message
+	mov		rdx, 1			; length
 	syscall
 
 	ret
-	.endln:	db	0xa
 
 ; std.outqw(RAX)
 ; print QWord in hex to stdout
@@ -65,13 +64,12 @@ std.outqwln:
 
 	mov		rax, 1			; sys_write
 	mov		rdi, 1			; stdout
-	mov		rsi, .endln		; message
+	mov		rsi, std.endln	; message
 	mov		rdx, 1			; number of characters
 	syscall
 
 	ret
-	.endln:	db	0xa
 
 section .data
-hexits:	db	"0123456789ABCDEF"
-
+hexits:		db	"0123456789ABCDEF"
+std.endln:	db	0xa, 0x0
