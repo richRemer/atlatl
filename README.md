@@ -1,5 +1,7 @@
 @lang Programming Language
 ==========================
+This is all just spewed ideas and nonsense.  I have since decided on a bottom-up
+approach, so much of this is poorly organized notes on old ideas.
 
 Source Files
 ------------
