@@ -1,5 +1,6 @@
 global _start
 
+extern mem.create_index
 extern zstr.len
 extern std.outln
 extern std.outqwln
@@ -8,6 +9,10 @@ extern sys.exit
 
 section .text
 _start:
+    ;; initialize dynamic memory; must be called before alloc and
+    ;; friends
+    call    mem.create_index
+
     mov     rax, app_id     ; zstring app id
     call    std.outln
 
