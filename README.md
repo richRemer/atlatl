@@ -324,6 +324,15 @@ fn:close(int:fd; int):
     scope
  * **@package** - package information; available in all scopes
 
+Calling Convention
+------------------
+For this early stage, the calling convention is as follows:
+ * no more than 14 arguments
+ * no more than 14 return values
+ * arguments in RAX, RBX, RCX, RDX, RSI, RDI, R8-R15
+ * return values in RAX, RBX, RCX, RDX, RSI, RDI, R8-R15
+ * preserve registers not mentioned in formal params
+
 Language Organization
 ---------------------
  * system primitives
