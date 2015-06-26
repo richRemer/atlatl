@@ -2,7 +2,7 @@ ASM=nasm
 ASMFLAGS=-f elf64
 LD=ld
 LDFLAGS=
-SOURCES=atlatl.asm sys.asm mem.asm std.asm zstr.asm zptrs.asm
+SOURCES=atlatl.asm sys.asm mem.asm std.asm math.asm zstr.asm zptrs.asm
 OBJECTS=$(SOURCES:.asm=.o)
 EXECUTABLE=atlatl
 
