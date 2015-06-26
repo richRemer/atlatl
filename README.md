@@ -332,6 +332,10 @@ For this early stage, the calling convention is as follows:
  * arguments in RAX, RBX, RCX, RDX, RSI, RDI, R8-R15
  * return values in RAX, RBX, RCX, RDX, RSI, RDI, R8-R15
  * preserve registers not mentioned in formal params
+ * RSP preserved for call/ret use
+ * RBP preserved for future use
+   * number of args
+   * error status
 
 Language Organization
 ---------------------
