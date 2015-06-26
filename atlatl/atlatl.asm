@@ -1,9 +1,7 @@
 global _start
 
 extern mem.create_index
-extern zstr.len
 extern std.outln
-extern std.outqwln
 extern zptrs.each
 extern sys.exit
 
