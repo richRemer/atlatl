@@ -15,11 +15,9 @@ std.out:
     push    rsi             ; preserve
     push    rdi             ; preserve
 
-    push    rax             ; preserve message
+    mov     rsi, rax        ; message
     call    zstr.len        ; measure string
-
-    pop     rsi             ; message
-    mov     rdx, rax        ; length returned
+    mov     rdx, rax        ; message length
     mov     rax, 1          ; sys_write
     mov     rdi, 1          ; stdout
     syscall
