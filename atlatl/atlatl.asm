@@ -2,7 +2,7 @@ global _start
 
 extern mem.create_index
 extern std.outln
-extern zptrs.each
+extern zstr.eachq
 extern sys.exit
 
 section .text
@@ -16,7 +16,7 @@ _start:
 
     lea     rax, [rsp+16]   ; argv
     mov     rbx, std.outln  ; callable
-    call    zptrs.each      ; std.outln each string in argv
+    call    zstr.eachq      ; std.outln each string in argv
 
     call    sys.exit        ; exit with 0
 
