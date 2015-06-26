@@ -1,7 +1,7 @@
 global std.out
 global std.outln
-global std.outqw
-global std.outqwln
+global std.outq
+global std.outqln
 global std.endln
 
 extern zstr.len
@@ -35,9 +35,9 @@ std.outln:
 
     ret
 
-; std.outqw(RAX)
+; std.outq(RAX)
 ; print QWord in hex to stdout
-std.outqw:
+std.outq:
     mov     rcx, 16         ; number of characters
     .char:
     mov     rbx, rax        ; make copy
@@ -58,10 +58,10 @@ std.outqw:
 
     ret
 
-; std.outqwln(RAX)
+; std.outqln(RAX)
 ; print QWord in hex to stdout, followed by newline
-std.outqwln:
-    call    std.outqw       ; echo value
+std.outqln:
+    call    std.outq        ; echo value
 
     mov     rax, 1          ; sys_write
     mov     rdi, 1          ; stdout
