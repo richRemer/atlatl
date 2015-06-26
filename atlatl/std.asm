@@ -11,7 +11,11 @@ section .text
 ; std.out(RAX)
 ; print null-terminated string to stdout
 std.out:
-    push    rax             ; preserve arg
+    push    rdx             ; preserve
+    push    rsi             ; preserve
+    push    rdi             ; preserve
+
+    push    rax             ; preserve message
     call    zstr.len        ; measure string
 
     pop     rsi             ; message
@@ -20,6 +24,9 @@ std.out:
     mov     rdi, 1          ; stdout
     syscall
 
+    pop     rdi             ; restore
+    pop     rsi             ; restore
+    pop     rdx             ; restore
     ret
 
 ; std.outln(RAX)
@@ -27,17 +34,30 @@ std.out:
 std.outln:
     call    std.out         ; echo string
 
+    push    rdx             ; preserve
+    push    rsi             ; preserve
+    push    rdi             ; preserve
+
     mov     rax, 1          ; sys_write
     mov     rdi, 1          ; stdout
     mov     rsi, std.endln  ; message
     mov     rdx, 1          ; length
     syscall
 
+    pop     rdi             ; restore
+    pop     rsi             ; restore
+    pop     rdx             ; restore
     ret
 
 ; std.outq(RAX)
 ; print QWord in hex to stdout
 std.outq:
+    push    rbx             ; preserve
+    push    rcx             ; preserve
+    push    rdx             ; preserve
+    push    rsi             ; preserve
+    push    rdi             ; preserve
+
     mov     rcx, 16         ; number of characters
     .char:
     mov     rbx, rax        ; make copy
@@ -56,6 +76,11 @@ std.outq:
     mov     rdx, 16         ; number of characters
     syscall
 
+    push    rdi             ; preserve
+    push    rsi             ; preserve
+    push    rdx             ; preserve
+    push    rcx             ; preserve
+    push    rbx             ; preserve
     ret
 
 ; std.outqln(RAX)
@@ -63,12 +88,19 @@ std.outq:
 std.outqln:
     call    std.outq        ; echo value
 
+    push    rdx             ; preserve
+    push    rsi             ; preserve
+    push    rdi             ; preserve
+
     mov     rax, 1          ; sys_write
     mov     rdi, 1          ; stdout
     mov     rsi, std.endln  ; message
     mov     rdx, 1          ; number of characters
     syscall
 
+    pop     rdi             ; restore
+    pop     rsi             ; restore
+    pop     rdx             ; restore
     ret
 
 section .data

@@ -13,6 +13,7 @@ math.log2:              ; math.log2(val)
     call    sys.error
 
     .valid:
+    push    rcx         ; preserve
     mov     rcx, -1     ; begin count
 
     .shift:
@@ -21,4 +22,5 @@ math.log2:              ; math.log2(val)
     jnz     .shift      ; stop at 0
 
     mov     rax, rcx    ; return number of shifts
+    pop     rcx         ; restore
     ret

@@ -25,6 +25,9 @@ section .text
 ; mem.create_index()
 ; create the memory index
 mem.create_index:
+    push    rax             ; preserve
+    push    rdi             ; preserve
+
     mov     rax, 12         ; sys_brk
     mov     rdi, 0          ; get current brk
     syscall
@@ -43,6 +46,8 @@ mem.create_index:
     call    sys.error
 
     .exit:
+    pop     rdi             ; restore
+    pop     rax             ; restore
     ret
 
 ; mem.alloc(RAX) => RAX
