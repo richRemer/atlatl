@@ -4,6 +4,7 @@ extern zstr.len
 extern std.outln
 extern std.outqwln
 extern zptrs.each
+extern sys.exit
 
 section .text
 _start:
@@ -14,9 +15,7 @@ _start:
     mov     rbx, std.outln  ; callable
     call    zptrs.each      ; std.outln each string in argv
 
-    mov     rax, 60         ; sys_exit
-    mov     rdi, 0          ; success
-    syscall
+    call    sys.exit        ; exit with 0
 
 section .data
 app_id:     db  "atlatl v0.0.1α", 0x0
