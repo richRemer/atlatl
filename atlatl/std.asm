@@ -62,8 +62,8 @@ std.outq:
     and     rbx, 0xf        ; mask low bits
     mov     rsi, hexits     ; read buffer
     lea     rdi, [rsp-16]   ; write buffer
-    mov     dl, [rbx+rsi]   ; lookup hexit
-    mov     [rcx+rdi-1], dl ; move hexit into buffer
+    mov     dl, [rsi+rbx]   ; lookup hexit
+    mov     [rdi+rcx-1], dl ; move hexit into buffer
     shr     rax, 4          ; consume bits
     dec     rcx;            ; decrement character counter
     jnz     .char           ; loop to next character
@@ -74,11 +74,11 @@ std.outq:
     mov     rdx, 16         ; number of characters
     syscall
 
-    push    rdi             ; preserve
-    push    rsi             ; preserve
-    push    rdx             ; preserve
-    push    rcx             ; preserve
-    push    rbx             ; preserve
+    pop     rdi             ; restore
+    pop     rsi             ; restore
+    pop     rdx             ; restore
+    pop     rcx             ; restore
+    pop     rbx             ; restore
     ret
 
 ; std.outqln(RAX)
