@@ -10,10 +10,10 @@ for TEST in *.test; do
 
         cp $TEST_DIR/$CASE $WORKING_DIR/test_case.asm
         cp $TEST_DIR/test.asm $WORKING_DIR
-        cp <(cat $TEST_DIR/../Makefile | sed -e s/atlatl/test_case/) \
+        cp <(cat $TEST_DIR/../atlatl/Makefile | sed -e s/atlatl/test_case/) \
             $WORKING_DIR/Makefile
-        cp $TEST_DIR/../*.asm $WORKING_DIR
-        cp $TEST_DIR/../*.inc $WORKING_DIR
+        cp $TEST_DIR/../atlatl/*.asm $WORKING_DIR
+        cp $TEST_DIR/../atlatl/*.inc $WORKING_DIR
         rm $WORKING_DIR/atlatl.asm
 
         pushd $WORKING_DIR >/dev/null
