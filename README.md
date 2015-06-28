@@ -15,6 +15,14 @@ make
 ./atlatl
 ```
 
+Unit tests can be run from the test directory.
+
+**Running tests**
+```sh
+cd atlatl/test
+./test.sh
+```
+
 Source Files
 ------------
 Source filenames should be lowercase and use the **.atl** extension, and the
