@@ -1,7 +1,6 @@
 global mem.alloc
 global mem.free
 global mem.realloc
-global mem.index
 global mem.create_index
 
 extern sys.error
