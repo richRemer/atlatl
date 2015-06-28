@@ -4,7 +4,7 @@ TEST_DIR=`dirname $0`
 
 for TEST in *.test; do
     echo Begin test: $TEST
-    while read STATUS CASE
+    while read STATUS CASE OUT
     do
         WORKING_DIR=`mktemp -d`
 
@@ -19,11 +19,16 @@ for TEST in *.test; do
         pushd $WORKING_DIR >/dev/null
         make -s
         ERR=0
-        ./test_case || ERR=$?
+        OUT_ERR=
+        ./test_case >/dev/null || ERR=$?
+        [ -n "$OUT" ] && ./test_case | grep "$OUT" >/dev/null || OUT_ERR=$OUT
         popd >/dev/null
 
         [ $ERR -ne $STATUS ] \
             && echo "$CASE - expected $STATUS; got $ERR" >&2 && exit 1
+
+        [ -n "$OUT_ERR" ] \
+            && echo "$CASE - expected output $OUT" >&2 && exit 1
 
         echo $CASE - ok
 
