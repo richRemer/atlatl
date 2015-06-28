@@ -53,10 +53,8 @@ zstr.eachq:                 ; zstr.eachq(ptr, fn)
     jz      .exit           ; break on counter reaching 0
     push    rax             ; preserve
     push    rbx             ; preserve
-    push    rcx             ; preserve
     mov     rax, [rax]      ; current value
     call    rbx             ; invoke callback
-    pop     rcx             ; restore
     pop     rbx             ; restore
     pop     rax             ; restore
     add     rax, 8          ; adjust to next pointer

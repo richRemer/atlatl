@@ -6,6 +6,7 @@ global mem.create_index
 extern sys.error
 
 %include "err.inc"
+%include "util.inc"
 
 section .text
 
@@ -19,17 +20,16 @@ mem.alloc:                                  ; mem.alloc(size) => ptr
     ret
 
     .non_empty:
-    push    rbx                             ; preserve
-    push    rdi                             ; preserve
+    prsv    rcx, rdx, rsi, rdi, rsp         ; preserve for syscall
+    prsv    r8, r9, r10, r11                ; preserve for syscall
 
-    mov     rbx, rax                        ; save requested size
-
+    mov     rdx, rax                        ; save requested size
     mov     rax, 12                         ; sys_brk
     mov     rdi, 0                          ; get current brk
     syscall
 
     mov     rdi, rax                        ; current brk
-    add     rdi, rbx                        ; + requested bytes
+    add     rdi, rdx                        ; + requested bytes
     mov     rax, 12                         ; sys_brk
     syscall
 
@@ -40,9 +40,9 @@ mem.alloc:                                  ; mem.alloc(size) => ptr
     call    sys.error
 
     .exit:
-    sub     rax, rbx                        ; ptr to new memory
-    pop     rdi                             ; restore
-    pop     rbx                             ; restore
+    sub     rax, rdx                        ; ptr to new memory
+    rstr    r8, r9, r10, r11                ; restore
+    rstr    rcx, rdx, rsi, rdi, rsp         ; restore
     ret
 
 ; mem.free(RAX)

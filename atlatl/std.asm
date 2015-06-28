@@ -6,99 +6,89 @@ global std.endln
 
 extern zstr.len
 
+%include "util.inc"
+
 section .text
 
 ; std.out(RAX)
 ; print null-terminated string to stdout
 std.out:
-    push    rdx             ; preserve
-    push    rsi             ; preserve
-    push    rdi             ; preserve
+    prsv    rcx, rdx, rsi, rdi, rsp ; preserve for syscall
+    prsv    r8, r9, r10, r11        ; preserve for syscall
 
-    mov     rsi, rax        ; message
-    call    zstr.len        ; measure string
-    mov     rdx, rax        ; message length
-    mov     rax, 1          ; sys_write
-    mov     rdi, 1          ; stdout
+    mov     rsi, rax                ; message
+    call    zstr.len                ; measure string
+    mov     rdx, rax                ; message length
+    mov     rax, 1                  ; sys_write
+    mov     rdi, 1                  ; stdout
     syscall
 
-    pop     rdi             ; restore
-    pop     rsi             ; restore
-    pop     rdx             ; restore
+    rstr    r8, r9, r10, r11        ; restore
+    rstr    rcx, rdx, rsi, rdi, rsp ; restore
     ret
 
 ; std.outln(RAX)
 ; print null-terminated string to stdout, followed by newline
 std.outln:
-    call    std.out         ; echo string
+    call    std.out                 ; echo string
 
-    push    rdx             ; preserve
-    push    rsi             ; preserve
-    push    rdi             ; preserve
+    prsv    rcx, rdx, rsi, rdi, rsp ; preserve for syscall
+    prsv    r8, r9, r10, r11        ; preserve for syscall
 
-    mov     rax, 1          ; sys_write
-    mov     rdi, 1          ; stdout
-    mov     rsi, std.endln  ; message
-    mov     rdx, 1          ; length
+    mov     rax, 1                  ; sys_write
+    mov     rdi, 1                  ; stdout
+    mov     rsi, std.endln          ; message
+    mov     rdx, 1                  ; length
     syscall
 
-    pop     rdi             ; restore
-    pop     rsi             ; restore
-    pop     rdx             ; restore
+    rstr    r8, r9, r10, r11        ; restore
+    rstr    rcx, rdx, rsi, rdi, rsp ; restore
     ret
 
 ; std.outq(RAX)
 ; print QWord in hex to stdout
 std.outq:
-    push    rbx             ; preserve
-    push    rcx             ; preserve
-    push    rdx             ; preserve
-    push    rsi             ; preserve
-    push    rdi             ; preserve
+    prsv    rcx, rdx, rsi, rdi, rsp ; preserve for syscall
+    prsv    r8, r9, r10, r11        ; preserve for syscall
 
-    mov     rcx, 16         ; number of characters
+    mov     rcx, 16                 ; number of characters
     .char:
-    mov     rbx, rax        ; make copy
-    and     rbx, 0xf        ; mask low bits
-    mov     rsi, hexits     ; read buffer
-    lea     rdi, [rsp-16]   ; write buffer
-    mov     dl, [rsi+rbx]   ; lookup hexit
-    mov     [rdi+rcx-1], dl ; move hexit into buffer
-    shr     rax, 4          ; consume bits
-    dec     rcx;            ; decrement character counter
-    jnz     .char           ; loop to next character
+    mov     rdx, rax                ; make copy
+    and     rdx, 0xf                ; mask low bits
+    mov     rsi, hexits             ; read buffer
+    lea     rdi, [rsp-16]           ; write buffer
+    mov     dl, [rsi+rdx]           ; lookup hexit
+    mov     [rdi+rcx-1], dl         ; move hexit into buffer
+    shr     rax, 4                  ; consume bits
+    dec     rcx                     ; decrement character counter
+    jnz     .char                   ; loop to next character
 
-    mov     rax, 1          ; sys_write
-    mov     rdi, 1          ; stdout
-    lea     rsi, [rsp-16]   ; message
-    mov     rdx, 16         ; number of characters
+    mov     rax, 1                  ; sys_write
+    mov     rdi, 1                  ; stdout
+    lea     rsi, [rsp-16]           ; message
+    mov     rdx, 16                 ; number of characters
     syscall
 
-    pop     rdi             ; restore
-    pop     rsi             ; restore
-    pop     rdx             ; restore
-    pop     rcx             ; restore
-    pop     rbx             ; restore
+    rstr    r8, r9, r10, r11        ; restore
+    rstr    rcx, rdx, rsi, rdi, rsp ; restore
     ret
 
 ; std.outqln(RAX)
 ; print QWord in hex to stdout, followed by newline
 std.outqln:
-    call    std.outq        ; echo value
+    call    std.outq                ; echo value
 
-    push    rdx             ; preserve
-    push    rsi             ; preserve
-    push    rdi             ; preserve
+    prsv    rcx, rdx, rsi, rdi, rsp ; preserve for syscall
+    prsv    r8, r9, r10, r11        ; preserve for syscall
 
-    mov     rax, 1          ; sys_write
-    mov     rdi, 1          ; stdout
-    mov     rsi, std.endln  ; message
-    mov     rdx, 1          ; number of characters
+    mov     rax, 1                  ; sys_write
+    mov     rdi, 1                  ; stdout
+    mov     rsi, std.endln          ; message
+    mov     rdx, 1                  ; number of characters
     syscall
 
-    pop     rdi             ; restore
-    pop     rsi             ; restore
-    pop     rdx             ; restore
+    rstr    r8, r9, r10, r11        ; restore
+    rstr    rcx, rdx, rsi, rdi, rsp ; restore
     ret
 
 section .data
