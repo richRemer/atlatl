@@ -3,6 +3,7 @@ global test_case
 extern mem.alloc
 extern sys.error
 
+section .text
 test_case:
     mov     rax, 0x10       ; 16 bytes
     call    mem.alloc       ; allocate memory

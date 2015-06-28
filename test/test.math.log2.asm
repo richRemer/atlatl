@@ -3,6 +3,7 @@ global test_case
 extern math.log2
 extern sys.error
 
+section .text
 test_case:
     mov     rax, 1          ; argument
     call    math.log2       ; calculate
