@@ -1,5 +1,9 @@
 global std.out
 global std.outln
+global std.outb
+global std.outbln
+global std.outd
+global std.outdln
 global std.outq
 global std.outqln
 global std.endln
@@ -39,6 +43,98 @@ std.outln:
     mov     rdi, 1                  ; stdout
     mov     rsi, std.endln          ; message
     mov     rdx, 1                  ; length
+    syscall
+
+    rstr    r8, r9, r10, r11        ; restore
+    rstr    rcx, rdx, rsi, rdi, rsp ; restore
+    ret
+
+; std.outb(RAX)
+; print Byte in hex to stdout
+std.outb:
+    prsv    rcx, rdx, rsi, rdi, rsp ; preserve for syscall
+    prsv    r8, r9, r10, r11        ; preserve for syscall
+
+    mov     rcx, 2                  ; number of characters
+    .char:
+    mov     rdx, rax                ; make copy
+    and     rdx, 0xf                ; mask low bits
+    mov     rsi, hexits             ; read buffer
+    lea     rdi, [rsp-2]            ; write buffer
+    mov     dl, [rsi+rdx]           ; lookupo hexit
+    mov     [rdi+rcx-1], dl         ; move hexit into buffer
+    shr     rax, 4                  ; consume bits
+    dec     rcx                     ; decrement character counter
+    jnz     .char                   ; loop to next character
+
+    mov     rax, 1                  ; sys_write
+    mov     rdi, 1                  ; stdout
+    lea     rsi, [rsp-2]            ; message
+    mov     rdx, 2                  ; number of characters
+    syscall
+
+    rstr    r8, r9, r10, r11        ; restore
+    rstr    rcx, rdx, rsi, rdi, rsp ; restore
+    ret
+
+; std.outbln(RAX)
+; print Byte in hex to stdout, followed by newline
+std.outbln:
+    call    std.outb                ; echo value
+
+    prsv    rcx, rdx, rsi, rdi, rsp ; preserve for syscall
+    prsv    r8, r9, r10, r11        ; preserve for syscall
+
+    mov     rax, 1                  ; sys_write
+    mov     rdi, 1                  ; stdout
+    mov     rsi, std.endln          ; message
+    mov     rdx, 1                  ; number of characters
+    syscall
+
+    rstr    r8, r9, r10, r11        ; restore
+    rstr    rcx, rdx, rsi, rdi, rsp ; restore
+    ret
+
+; std.outd(RAX)
+; print DWord in hex to stdout
+std.outd:
+    prsv    rcx, rdx, rsi, rdi, rsp ; preserve for syscall
+    prsv    r8, r9, r10, r11        ; preserve for syscall
+
+    mov     rcx, 8                  ; number of characters
+    .char:
+    mov     rdx, rax                ; make copy
+    and     rdx, 0xf                ; mask low bits
+    mov     rsi, hexits             ; read buffer
+    lea     rdi, [rsp-8]            ; write buffer
+    mov     dl, [rsi+rdx]           ; lookup hexit
+    mov     [rdi+rcx-1], dl         ; move hexit into buffer
+    shr     rax, 4                  ; consume bits
+    dec     rcx                     ; decrement character counter
+    jnz     .char                   ; loop to next character
+
+    mov     rax, 1                  ; sys_write
+    mov     rdi, 1                  ; stdout
+    lea     rsi, [rsp-8]            ; message
+    mov     rdx, 8                  ; number of characters
+    syscall
+
+    rstr    r8, r9, r10, r11        ; restore
+    rstr    rcx, rdx, rsi, rdi, rsp ; restore
+    ret
+
+; std.outdln(RAX)
+; print DWord in hex to stdout, followed by newline
+std.outdln:
+    call    std.outd                ; echo value
+
+    prsv    rcx, rdx, rsi, rdi, rsp ; preserve for syscall
+    prsv    r8, r9, r10, r11        ; preserve for syscall
+
+    mov     rax, 1                  ; sys_write
+    mov     rdi, 1                  ; stdout
+    mov     rsi, std.endln          ; message
+    mov     rdx, 1                  ; number of characters
     syscall
 
     rstr    r8, r9, r10, r11        ; restore
