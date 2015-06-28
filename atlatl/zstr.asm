@@ -2,13 +2,14 @@ global zstr.len
 global zstr.lenq
 global zstr.eachq
 
+%include "util.inc"
+
 section .text
 
 ; zstr.len(RAX) => RAX
 ; calculate length of null-terminated string
 zstr.len:                   ; zstr.len(ptr) => length
-    push    rcx             ; preserve
-    push    rdi             ; preserve
+    prsv    rcx, rdi        ; preserve
 
     mov     rdi, rax        ; beginning of scan
     mov     al, 0           ; scan for NULL
@@ -17,15 +18,13 @@ zstr.len:                   ; zstr.len(ptr) => length
     mov     rax, 0xfffffffe ; limit - 1
     sub     rax, rcx        ; length
 
-    pop     rdi             ; restore
-    pop     rcx             ; restore
+    rstr    rcx, rdi        ; restore
     ret
 
 ; zstr.lenq(RAX) => RAX
 ; calculate length of null-terminated string of QWords
 zstr.lenq:                  ; zstr.lenq(ptr) => length
-    push    rcx             ; preserve
-    push    rdi             ; preserve
+    prsv    rcx, rdi        ; preserve
 
     mov     rdi, rax        ; beginning of scan
     mov     rax, 0          ; scan for NULL
@@ -34,8 +33,7 @@ zstr.lenq:                  ; zstr.lenq(ptr) => length
     mov     rax, 0x1ffffffe ; limit - 1
     sub     rax, rcx        ; length
 
-    pop     rdi             ; restore
-    pop     rcx             ; restore
+    rstr    rcx, rdi        ; restore
     ret
 
 ; zstr.eachq(RAX, RBX)
