@@ -1,6 +1,8 @@
 global sys.exit
 global sys.error
 
+%include "err.inc"
+
 section .text
 
 ; sys.exit()

@@ -5,8 +5,7 @@ global mem.create_index
 
 extern sys.error
 
-%define ENOMEM  0x55
-%define ENOIMP  0x11
+%include "err.inc"
 
 section .text
 

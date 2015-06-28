@@ -2,7 +2,7 @@ global math.log2
 
 extern sys.error
 
-%define EUNDEF  0xf0
+%include "err.inc"
 
 ; math.log2(RAX) => RAX
 ; calculate base 2 logarithm of an integer
