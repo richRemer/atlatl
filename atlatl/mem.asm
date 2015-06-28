@@ -60,5 +60,4 @@ mem.realloc:                                ; mem.free(ptr, size) => size
     ret
 
 section .bss
-mem.index:  resq    1
 mem.zeros:  resq    1
