@@ -1,5 +1,7 @@
 global std.out
 global std.outln
+global std.outs
+global std.outsln
 global std.outb
 global std.outbln
 global std.outd
@@ -11,12 +13,13 @@ global std.endln
 extern zstr.len
 
 %include "util.inc"
+%include "String.inc"
 
 section .text
 
 ; std.out(RAX)
 ; print null-terminated string to stdout
-std.out:
+std.out:                            ; std.out(zstr)
     prsv    rcx, rdx, rsi, rdi, rsp ; preserve for syscall
     prsv    r8, r9, r10, r11        ; preserve for syscall
 
@@ -33,8 +36,42 @@ std.out:
 
 ; std.outln(RAX)
 ; print null-terminated string to stdout, followed by newline
-std.outln:
+std.outln:                          ; std.outln(zstr)
     call    std.out                 ; echo string
+
+    prsv    rcx, rdx, rsi, rdi, rsp ; preserve for syscall
+    prsv    r8, r9, r10, r11        ; preserve for syscall
+
+    mov     rax, 1                  ; sys_write
+    mov     rdi, 1                  ; stdout
+    mov     rsi, std.endln          ; message
+    mov     rdx, 1                  ; length
+    syscall
+
+    rstr    r8, r9, r10, r11        ; restore
+    rstr    rcx, rdx, rsi, rdi, rsp ; restore
+    ret
+
+; std.outs(RAX)
+; print String to stdout
+std.outs:                           ; std.outs(String)
+    prsv    rcx, rdx, rsi, rdi, rsp ; preserve for syscall
+    prsv    r8, r9, r10, r11        ; preserve for syscall
+
+    mov     rsi, [rax+String.pdata] ; message
+    mov     rdx, [rax+String.length]; length
+    mov     rdi, 1                  ; stdout
+    mov     rax, 1                  ; sys_write
+    syscall
+
+    rstr    r8, r9, r10, r11        ; restore
+    rstr    rcx, rdx, rsi, rdi, rsp ; restore
+    ret
+
+; std.outsln(RAX)
+; print String to stdout, followed by newline
+std.outsln:                         ; std.outsln(String)
+    call    std.outs                ; print message
 
     prsv    rcx, rdx, rsi, rdi, rsp ; preserve for syscall
     prsv    r8, r9, r10, r11        ; preserve for syscall
