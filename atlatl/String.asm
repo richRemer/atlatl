@@ -1,9 +1,23 @@
+global String.createz
 global String.zstr
 
 extern mem.alloc
+extern zstr.len
 
 %include "String.inc"
 %include "util.inc"
+
+; String.createz(RAX) => RAX
+; create a String object from a null-terminated string buffer
+String.createz:                         ; String.createz(ptr) => String
+    push    rax                         ; preserve ptr to buffer
+    call    zstr.len                    ; calculate length
+    push    rax                         ; save length
+    mov     rax, String.size            ; bytes for new String
+    call    mem.alloc                   ; create instance
+    pop     qword[rax+String.length]    ; set String.length
+    pop     qword[rax+String.pdata]     ; set String.pdata
+    ret
 
 ; String.zstr(RAX) => RAX
 ; generate a null-terminated string buffer
