@@ -2,11 +2,13 @@ global Array.createq
 global Array.createb
 global Array.eachq
 global Array.eachb
+global Array.sliceq
 
 extern mem.alloc
 extern math.log2
 
 %include "Array.inc"
+%include "util.inc"
 
 ; Array.createq(RAX) => RAX
 ; create new QWord array with specified length
@@ -45,6 +47,43 @@ Array.eachq:                            ; Array.eachq(Array, fn)
 
     .exit:
     pop     rcx                         ; restore
+    ret
+
+; Array.sliceq(RAX, RBX) => RAX, RBX
+; slice array into two at offset
+Array.sliceq:                           ; Array.sliceq(Array,int)=>Array,Array
+    prsv    rcx, rdx                    ; preserve
+    push    rax                         ; preserve Array argument
+
+    mov     rax, [rax+Array.length]     ; length
+    cmp     rax, rbx                    ; compare to offset
+    jge     .offset_ok                  ; check if offset is within length
+    mov     rbx, rax                    ; move offset to end of array
+
+    .offset_ok:
+    pop     rcx                         ; restore Array argument
+
+    mov     rax, 0                      ; empty
+    call    Array.createq               ; create 'after' Array
+    push    qword[rcx+Array.length]     ; copy Array argument length
+    pop     qword[rax+Array.length]     ; into 'after' length
+    push    qword[rcx+Array.pdata]      ; copy Array data pointer
+    pop     qword[rax+Array.pdata]      ; to 'after' Array
+
+    sub     [rax+Array.length], rbx     ; subtract offset from length
+    push    rbx                         ; save offset
+    shl     rbx, 3                      ; 8-Bytes per item offset
+    add     [rax+Array.pdata], rbx      ; move 'after' pointer to offset
+    pop     rdx                         ; restore offset
+    mov     rbx, rax                    ; set 'after' result
+
+    mov     rax, 0                      ; empty
+    call    Array.createq               ; create 'before' Array result
+    mov     [rax+Array.length], rdx     ; set 'before' length to offset
+    push    qword [rcx+Array.pdata]     ; copy Array data pointer
+    pop     qword [rax+Array.pdata]     ; to 'before' Array
+
+    rstr    rcx, rdx                    ; restore
     ret
 
 ; Array.createb(RAX) => RAX
