@@ -7,5 +7,6 @@
 %define String.length Array.length
 %define String.size Array.size
 %define String.create Array.createb
+%define String.slice Array.sliceb
 
 %endif
