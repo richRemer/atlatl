@@ -1,8 +1,9 @@
 global Array.createq
-global Array.createb
 global Array.eachq
-global Array.eachb
 global Array.sliceq
+global Array.createb
+global Array.eachb
+global Array.sliceb
 
 extern mem.alloc
 extern math.log2
@@ -122,4 +123,39 @@ Array.eachb:                            ; Array.eachb(Array, fn)
 
     .exit:
     pop     rcx                         ; restore
+    ret
+
+; Array.sliceb(RAX, RBX) => RAX, RBX
+; slice array into two at offset
+Array.sliceb:                           ; Array.sliceb(Array,int)=>Array,Array
+    prsv    rcx, rdx                    ; preserve
+    push    rax                         ; preserve Array argument
+
+    mov     rax, [rax+Array.length]     ; length
+    cmp     rax, rbx                    ; compare to offset
+    jge     .offset_ok                  ; check if offset is within length
+    mov     rbx, rax                    ; move offset to end of array
+
+    .offset_ok:
+    pop     rcx                         ; restore Array argument
+
+    mov     rax, 0                      ; empty
+    call    Array.createb               ; create 'after' Array
+    push    qword[rcx+Array.length]     ; copy Array argument length
+    pop     qword[rax+Array.length]     ; into 'after' length
+    push    qword[rcx+Array.pdata]      ; copy Array data pointer
+    pop     qword[rax+Array.pdata]      ; to 'after' Array
+
+    sub     [rax+Array.length], rbx     ; subtract offset from length
+    add     [rax+Array.pdata], rbx      ; move 'after' pointer to offset
+    mov     rdx, rbx                    ; set offset
+    mov     rbx, rax                    ; set 'after' result
+
+    mov     rax, 0                      ; empty
+    call    Array.createb               ; create 'before' Array result
+    mov     [rax+Array.length], rdx     ; set 'before' length to offset
+    push    qword [rcx+Array.pdata]     ; copy Array data pointer
+    pop     qword [rax+Array.pdata]     ; to 'before' Array
+
+    rstr    rcx, rdx                    ; restore
     ret

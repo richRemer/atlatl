@@ -4,3 +4,5 @@
 0   test.Array.createb.asm  00
 2   test.Array.sliceqb.asm  00000000000000010000000000000002
 1   test.Array.sliceqa.asm  0000000000000003
+4   test.Array.slicebb.asm  01020304
+2   test.Array.sliceba.asm  0506
