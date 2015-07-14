@@ -8,5 +8,10 @@
 %define String.size Array.size
 %define String.create Array.createb
 %define String.slice Array.sliceb
+%define String.lfind Array.lfindb
+%define String.rfind Array.rfindb
+%define String.split Array.splitb
+%define String.before Array.beforeb
+%define String.after Array.afterb
 
 %endif
