@@ -24,6 +24,7 @@ cd atlatl/test
 ```
 
 **"Compiling" atlatl**
+
 Using the word "compile" when referring to the current development version is
 mildly ridiculous.  But when the day comes when the word "compile" applies to
 what this thing does, it will be used like so:
