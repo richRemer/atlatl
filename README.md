@@ -23,7 +23,7 @@ cd atlatl/test
 ./test.sh
 ```
 
-**"Compiling" atlatl**
+**"Compiling" with atlatl**
 
 Using the word "compile" when referring to the current development version is
 mildly ridiculous.  But when the day comes when the word "compile" applies to
