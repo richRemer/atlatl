@@ -23,6 +23,18 @@ cd atlatl/test
 ./test.sh
 ```
 
+**"Compiling" atlatl**
+Using the word "compile" when referring to the current development version is
+mildly ridiculous.  But when the day comes when the word "compile" applies to
+what this thing does, it will be used like so:
+
+```sh
+atlatl foo.atl
+nasm -f elf64 foo.S
+ld foo.o -o foo
+./foo
+```
+
 Source Files
 ------------
 Source filenames should be lowercase and use the **.atl** extension, and the
