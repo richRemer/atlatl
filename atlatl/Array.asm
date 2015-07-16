@@ -166,7 +166,7 @@ Array.beforeq:                          ; Array.beforeq(Array,qword) => 2-Array
 ; split Array into part after QWord value and rest
 Array.afterq:                           ; Array.afterq(Array,qword) => 2-Array
     push    rax                         ; preserve Array argument
-    call    Array.lfindq                ; find offset of value
+    call    Array.rfindq                ; find offset of value
     inc     rax                         ; move offset after the value
     mov     rbx, rax                    ; offset for slice
     pop     rax                         ; restore Array argument
@@ -318,7 +318,7 @@ Array.beforeb:                          ; Array.beforeb(Array,byte) => 2-Array
 ; split Array into part after Byte value and rest
 Array.afterb:                           ; Array.afterb(Array,byte) => 2-Array
     push    rax                         ; preserve Array argument
-    call    Array.lfindb                ; find offset of value
+    call    Array.rfindb                ; find offset of value
     inc     rax                         ; move offset after the value
     mov     rbx, rax                    ; offset for slice
     pop     rax                         ; restore Array argument
