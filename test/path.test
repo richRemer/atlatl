@@ -1,0 +1,4 @@
+0   test.path.filename.asm  ^filename\\.ext$
+0   test.path.basename.asm  ^filename$
+0   test.path.ext.asm       ^\\.ext$
+0   test.path.dirname.asm   ^/path/to$
